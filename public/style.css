@@ -1,0 +1,65 @@
+body, html {
+    --purplish:hsl(332, 90%, 50%);
+    font-family:sans-serif;
+    margin:0;
+}
+main {
+    background:black;
+    /* display:flex;
+    justify-content:space-evenly; */
+    height:100vh;
+    display:grid;
+    grid-template-columns:auto auto;
+    grid-template-rows:auto auto;
+    grid-template-areas:"algorithm interface interface"
+                        "algorithm interface interface"
+}
+#algorithm {
+    background:black;
+    width:16vw;
+    display:grid;
+    grid-template-columns:auto auto;
+    overflow:scroll;
+    height:70vh;
+}
+#tileBox {
+    background:var(--purplish);
+    display:grid;
+    grid-template-columns:auto auto auto auto auto auto auto auto auto auto;
+    width:80vw;
+    height:20em;
+} .tileBags {
+    border:lime 1px solid;
+} .keymaps, .fractions, .decimals, .frequencies {
+    background:black;
+    margin:1%;
+    color:white;
+    text-align:center;  
+}
+.fractionRatio, .decimalRatio {
+    background:white;
+    border:solid 1px black;
+    text-align:center;
+    width:7vw;
+}
+#rithmForm {
+    color:white;
+    text-align:center;
+}
+#howMuch, #concertPitch {
+    width:5em;
+}
+
+#outerRithm {
+    background:blue;
+    grid-area:algorithm;
+}
+
+#tileBox {
+    grid-area:interface;
+}
+
+#localDatabaseForm {
+    background:var(--purplish);
+    grid-area:database;
+}
