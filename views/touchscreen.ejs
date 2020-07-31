@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            body {
+                margin:0;
+            }
+            #top {
+                background:blue;
+                height:20vh;
+                color:white;
+                font-family:sans-serif;
+                font-weight:bold;
+                display:flex;
+            }
+            #padBox {
+                background:pink;
+                height:80vh;
+                display:grid;
+                grid-template-columns:1fr 1fr 1fr;
+                grid-template-rows:auto;
+                /* justify-items:center; */
+            } .pads {
+                background:aqua;
+                border:solid 1px black;
+                display:flex;
+                flex-direction:column;
+                /* width:5em; */
+                /* height:2em; */
+                text-align:center;
+            } #concertPitch, #numberOfHarmonics {
+                width:4em;
+                text-align:center;
+            } #harmonicsArea {
+                border:solid 1px black;
+                width:6em;
+                text-align:center;
+                height:20vh;
+                overflow:scroll;
+            } #topRight {
+
+            } #harmonicsArea {
+                
+            } .indexes, .ratios, .decimals, .frequencies {
+                border:solid 1px black;
+                flex-grow:1;
+                user-select: none;
+            } #ratioSelectorBox {
+                border:solid 1px black;
+                text-align:center;
+            }
+        </style>
+    </head>
+    <body>
+        <section id='top'>
+            <article id='topLeft'>
+                concert pitch: <input id='concertPitch' value='216'><br/>
+                # of harmonics: <input id='numberOfHarmonics' value='10'><br/>
+                <button id='generatorButton'>generate</button><br/>
+                <div id='ratioSelectorBox'>
+                    selected ratio: <span id='selectedRatio'></span><br/>
+                    box 
+                    <select id="boxSelect">
+                        <option value="0">1</option>
+                        <option value="1">2</option>
+                        <option value="2">3</option>
+                        <option value="3">4</option>
+                        <option value="4">5</option>
+                        <option value="5">6</option>
+                        <option value="6">7</option>
+                        <option value="7">8</option>
+                        <option value="8">9</option>
+                        <option value="9">10</option>
+                        <option value="10">11</option>
+                        <option value="11">12</option>
+                        <option value="12">13</option>
+                        <option value="13">14</option>
+                        <option value="14">15</option>
+                    </select>
+                    <button id='ratioAdderButton'>add</button>
+                </div>
+                
+            </article>
+            <article id='topRight'>
+                <div id='harmonicsArea'></div>
+            </article>
+            
+        </section>
+        <section id='padBox'>
+            <% for (let i = 0; i < 15; i++) { %>
+                <article class='pads' data-index='<%=i%>'>
+                    <div class='indexes'>&nbsp;</div>
+                    <div class='ratios'>&nbsp;</div>
+                    <div class='decimals'>&nbsp;</div>
+                    <div class='frequencies'>&nbsp;</div>
+                </article>
+            <% } %>
+        </section>
+    </body>
+    <script>
+        let atx;
+        document.addEventListener('touchstart', initializeContext);
+
+        function initializeContext() {
+            atx = new AudioContext();
+            document.removeEventListener('touchstart', initializeContext);
+        }
+        
+    
+        class Music {
+            constructor(name, index) {
+                this.name = name;
+                this.index = index;
+            }
+            on() {
+                this.name = atx.createOscillator();
+                this.name.frequency.value = concertPitch.value* eval(ratios[this.index].textContent);
+                this.name.connect(atx.destination);
+                this.name.start(0);
+            }
+            off() {
+                this.name.stop(0);
+            }
+        }
+
+        let osc0, osc1, osc2, osc3, osc4, osc5, osc6, osc7, osc8, osc9, osc10, osc11, osc12, osc13, osc14;
+
+        let notes = [
+        new Music(osc0, 0),
+        new Music(osc1, 1),
+        new Music(osc2, 2),
+        new Music(osc3, 3),
+        new Music(osc4, 4),
+        new Music(osc5, 5),
+        new Music(osc6, 6),
+        new Music(osc7, 7),
+        new Music(osc8, 8),
+        new Music(osc9, 9),
+        new Music(osc10, 10),
+        new Music(osc11, 11),
+        new Music(osc12, 12),
+        new Music(osc13, 13),
+        new Music(osc14, 14),
+
+        ];
+
+        window.addEventListener('touchstart', e => {
+
+            switch (parseInt(e.target.parentNode.getAttribute('data-index'))) {
+                case 0:
+                    notes[0].on();
+                    e.preventDefault();
+                break;
+                case 1:
+                    notes[1].on();
+                    e.preventDefault();
+                break;
+                case 2:
+                    notes[2].on();
+                    e.preventDefault();
+                break;
+                case 3:
+                    notes[3].on();
+                    e.preventDefault();
+                break;
+                case 4:
+                    notes[4].on();
+                    e.preventDefault();
+                break;
+                case 5:
+                    notes[5].on();
+                    e.preventDefault();
+                break;
+                case 6:
+                    notes[6].on();
+                    e.preventDefault();
+                break;
+                case 7:
+                    notes[7].on();
+                    e.preventDefault();
+                break;
+                case 8:
+                    notes[8].on();
+                    e.preventDefault();
+                break;
+                case 9:
+                    notes[9].on();
+                    e.preventDefault();
+                break;
+                case 10:
+                    notes[10].on();
+                    e.preventDefault();
+                break;
+                case 11:
+                    notes[11].on();
+                    e.preventDefault();
+                break;
+                case 12:
+                    notes[12].on();
+                    e.preventDefault();
+                break;
+                case 13:
+                    notes[13].on();
+                    e.preventDefault();
+                break;
+                case 14:
+                    notes[14].on();
+                    e.preventDefault();
+                break;
+            }
+        });
+
+        window.addEventListener('touchend', e => {
+            switch (parseInt(e.target.parentNode.getAttribute('data-index'))) {
+                case 0:
+                    notes[0].off();
+                    e.preventDefault();
+                break;
+                case 1:
+                    notes[1].off();
+                    e.preventDefault();
+                break;
+                case 2:
+                    notes[2].off();
+                    e.preventDefault();
+                break;
+                case 3:
+                    notes[3].off();
+                    e.preventDefault();
+                break;
+                case 4:
+                    notes[4].off();
+                    e.preventDefault();
+                break;
+                case 5:
+                    notes[5].off();
+                    e.preventDefault();
+                break;
+                case 6:
+                    notes[6].off();
+                    e.preventDefault();
+                break;
+                case 7:
+                    notes[7].off();
+                    e.preventDefault();
+                break;
+                case 8:
+                    notes[8].off();
+                    e.preventDefault();
+                break;
+                case 9:
+                    notes[9].off();
+                    e.preventDefault();
+                break;
+                case 10:
+                    notes[10].off();
+                    e.preventDefault();
+                break;
+                case 11:
+                    notes[11].off();
+                    e.preventDefault();
+                break;
+                case 12:
+                    notes[12].off();
+                    e.preventDefault();
+                break;
+                case 13:
+                    notes[13].off();
+                    e.preventDefault();
+                break;
+                case 14:
+                    notes[14].off();
+                    e.preventDefault();
+                break;
+            }
+        });
+
+        const generatorButton = document.getElementById('generatorButton');
+        const harmonicsArea = document.getElementById('harmonicsArea');
+        const concertPitch = document.getElementById('concertPitch');
+        const numberOfHarmonics = document.getElementById('numberOfHarmonics');
+
+        generatorButton.addEventListener('touchstart', () => {
+            let numerator = 1, denominator = 0, fractions = [];
+
+            for (let i = 0; i < numberOfHarmonics.value; i++) {
+                if (denominator > numerator) {
+                    denominator = 1;
+                    numerator++;
+                }
+                fractions.push(`${numerator}/${denominator}`);
+
+                denominator++;
+            }
+
+            let pool;
+        for (let j = 0; j < fractions.length; j++) {
+            for (let i = 1; i < fractions.length; i++) {
+                if (eval(fractions[i]) < eval(fractions[i-1])) {
+                    pool = fractions[i];
+                    fractions[i] = fractions[i-1];
+                    fractions[i-1] = pool;
+                
+                }
+                console.log(fractions[i])
+            }
+        }
+
+            for (let i = 0; i < numberOfHarmonics.value; i++) {
+
+                let node = document.createElement('div');
+                let text = document.createTextNode(fractions[i]);
+                node.appendChild(text);
+                harmonicsArea.appendChild(node);
+
+            }
+
+        });
+
+        const selectedRatio = document.getElementById('selectedRatio');
+
+        harmonicsArea.addEventListener('touchstart', e => {
+            selectedRatio.innerText = e.target.textContent;
+        })
+
+        harmonicsArea.addEventListener('touchstart', e => {
+            
+        })
+
+        const indexes = document.getElementsByClassName('indexes');
+        const ratios = document.getElementsByClassName('ratios');
+        const decimals = document.getElementsByClassName('decimals');
+        const frequencies = document.getElementsByClassName('frequencies');
+        
+
+        document.addEventListener('DOMContentLoaded', () => {
+            for (let i = 0; i < 15; i++) {
+                indexes[i].innerText = i+1;
+            }
+        });
+
+        const ratioAdderButton = document.getElementById('ratioAdderButton');
+        const boxSelect = document.getElementById('boxSelect');
+
+        
+
+        ratioAdderButton.addEventListener('touchstart', () => {
+            console.log(selectedRatio.textContent)
+            console.log(boxSelect.value)
+            
+            ratios[parseInt(boxSelect.value)].innerText = selectedRatio.textContent;
+            decimals[parseInt(boxSelect.value)].innerText = eval(selectedRatio.textContent);
+            frequencies[parseInt(boxSelect.value)].innerText = concertPitch.value* eval(selectedRatio.textContent)
+        });
+    </script>
+</html>
