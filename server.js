@@ -2,9 +2,9 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const ejs = require('ejs');
-const IP = '10.0.0.202'; //bauer
+// const IP = '10.0.0.202'; //bauer
 //const IP = '192.168.86.49'; //take action recovery
-//const IP = 'localhost';
+const IP = 'localhost';
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '/views'));
