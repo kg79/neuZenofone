@@ -3,9 +3,8 @@
     <head>
  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
         <link rel='stylesheet' href='style.css'>
-        <script src='indexedDB.js'></script>
     </head>
-    <body>
+    <body>  
         <main>
             <div id='box0'>
                 <div id='rithmForm'>
@@ -79,47 +78,18 @@
                             </select>
 
                 </section>
-
-                <section id='theBiquadFilter'>
-                    <label>Biquad Filter: </label>
-                    <select id='biquadFilter'>
-                           <option value="lowpass">lowpass</option>
-                           <option value="highpass">highpass</option>
-                           <option value="bandpass">bandpass</option>
-                           <option value="lowshelf">lowshelf</option>
-                           <option value="highshelf">highshelf</option>
-                           <option value="peaking">peaking</option>
-                           <option value="notch">notch</option>
-                           <option value="allpass">allpass</option>
-                   </select>
+\
    
-                    <p class='biquadLabel' id='biquadFrequencyContainer'>  
-                        freq.  <input type='number' id='biquadFrequency' value='528'>
-                    </p>
 
-                    <p class='biquadLabel' id='biquadQualityContainer'>  
-                        quality  <input type='number' id='biquadQuality' value='10'>
-                    </p>
-
-                    <p class='biquadLabel' id='biquadGainContainer' hidden>
-                        gain <input type='range' id='biquadGain' value='10' min='-40' max='40' step='1'>
-                    </p>
-             
                 </section>
 
-                <section id='compressor'>
-                    <label>Compressor</label><br/>
-                    <span class='compressorBoxes'>attack:<input class='compressors' id='compressorAttack' type='range' min='0' max='1' step='.1' value='.1'></span><br/>
-                    <span class='compressorBoxes'>knee:<input class='compressors' id='compressorKnee' type='range' min='0' max='40' step='1' value='30'></span><br/>
-                    <span class='compressorBoxes'>ratio:<input class='compressors' id='compressorRatio' type='range' min='1' max='20' step='1' value='12'></span><br/>
-                    <span class='compressorBoxes'>release:<input class='compressors' id='compressorRelease' type='range' min='0' max='1' step='.05' value='.25'></span><br/>
-                    <span class='compressorBoxes'>threshold:<input class='compressors' id='compressorThreshold' type='range' min='-100' max='0' step='1' value='-24'></span>
-                </section>
 
             </div>
         </main>
     </body>
     <script>
+
+        
         const keyCodes = [
             {'symb':'1', 'numb':49},
             {'symb':'2', 'numb':50},
@@ -329,12 +299,6 @@ clear.addEventListener('click', () => {
 
 
 
-
-
-        const biquadFilter = document.getElementById('biquadFilter');
-        const biquadFrequency = document.getElementById('biquadFrequency');
-        const biquadGain = document.getElementById('biquadGain');
-        const biquadQuality = document.getElementById('biquadQuality');
         const wave = document.getElementById('wave');
 
 
@@ -356,13 +320,6 @@ clear.addEventListener('click', () => {
         const fractionRatio = document.getElementsByClassName('fractionRatio');
         const decimalRatio = document.getElementsByClassName('decimalRatio');
         const frequencyRatio = document.getElementsByClassName('frequencyRatio');
-
-
-        const compressorAttack = document.getElementById('compressorAttack');
-        const compressorKnee = document.getElementById('compressorKnee');
-        const compressorRatio = document.getElementById('compressorRatio');
-        const compressorRelease = document.getElementById('compressorRelease');
-        const compressorThreshold = document.getElementById('compressorThreshold');
 
 
 
@@ -473,7 +430,7 @@ toPrecision(6).replace(/0+$/, '').replace(/\.$/, '')}`);
             }
     }
         }
-
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
         function trim() {
         //     for (let i = 1; i < ascending.length; i++) {
         //        if (ascending[i].decimals === ascending[i-1].decimals) {
@@ -642,12 +599,10 @@ document.onclick = () => atx = new AudioContext();
 
 
         class Music {
-            constructor(name, volume, biquad, compressor, index) {
+            constructor(name, volume, index) {
                 this.name = name;
                 this.volume = volume;
                 this.index = index;
-                this.biquad = biquad;
-                this.compressor = compressor;
                 this.playing = false;
             }
             on() {
@@ -655,27 +610,12 @@ document.onclick = () => atx = new AudioContext();
 
                     this.name = atx.createOscillator();
                     this.volume = atx.createGain();
-                    this.biquad = atx.createBiquadFilter();
-                    this.compressor = atx.createDynamicsCompressor();
 
                     this.name.frequency.value = concertPitch.value* eval(fractions[this.index].textContent);
                     this.name.type = wave.value;
-                    this.name.connect(this.volume).connect(this.biquad).
-                    connect(this.compressor).connect(atx.destination);
+                    this.name.connect(this.volume).connect(atx.destination);
                     this.name.start(0);
                     this.volume.gain.value = regularVolume.value/10;
-
-                    this.biquad.type = biquadFilter.value;
-                    this.biquad.frequency.value = biquadFrequency.value;
-                    this.biquad.gain.value = biquadGain.value;
-                    this.biquad.Q.value = biquadQuality.value;
-
-                    this.compressor.attack.value = compressorAttack.value;
-                    this.compressor.knee.value = compressorKnee.value;
-                    this.compressor.ratio.value = compressorRatio.value;
-                    this.compressor.release.value = compressorRelease.value;
-                    this.compressor.threshold.value = compressorThreshold.value;
-
 
                     this.playing = true;
                     keymaps[this.index].style.color = 'black';
@@ -707,54 +647,50 @@ let name0, name1, name2, name3, name4, name5, name6, name7, name8, name9, name10
 
 let volume0, volume1, volume2, volume3, volume4, volume5, volume6, volume7, volume8, volume9, volume10, volume11, volume12, volume13, volume14, volume15, volume16, volume17, volume18, volume19, volume20, volume21, volume22, volume23, volume24, volume25, volume26, volume27, volume28, volume29, volume30, volume31, volume32, volume33, volume34, volume35, volume36, volume37, volume38, volume39, volume40;
 
-let biquad0, biquad1, biquad2, biquad3, biquad4, biquad5, biquad6, biquad7, biquad8, biquad9, biquad10, biquad11, biquad12, biquad13, biquad14, biquad15, biquad16, biquad17, biquad18, biquad19, biquad20, biquad21, biquad22, biquad23, biquad24, biquad25, biquad26, biquad27, biquad28, biquad29, biquad30, biquad31, biquad32, biquad33, biquad34, biquad35, biquad36, biquad37, biquad38, biquad39, biquad40;
-
-let compressor0, compressor1, compressor2, compressor3, compressor4, compressor5, compressor6, compressor7, compressor8, compressor9, compressor10, compressor11, compressor12, compressor13, compressor14, compressor15, compressor16, compressor17, compressor18, compressor19, compressor20, compressor21, compressor22, compressor23, compressor24, compressor25, compressor26, compressor27, compressor28, compressor29, compressor30, compressor31, compressor32, compressor33, compressor34, compressor35, compressor36, compressor37, compressor38, compressor39, compressor40;
-
 let notes = [
 
-	new Music(name0, volume0, biquad0, compressor0, 0),
-	new Music(name1, volume1, biquad1, compressor1, 1),
-	new Music(name2, volume2, biquad2, compressor2, 2),
-	new Music(name3, volume3, biquad3, compressor3, 3),
-	new Music(name4, volume4, biquad4, compressor4, 4),
-	new Music(name5, volume5, biquad5, compressor5, 5),
-	new Music(name6, volume6, biquad6, compressor6, 6),
-	new Music(name7, volume7, biquad7, compressor7, 7),
-	new Music(name8, volume8, biquad8, compressor8, 8),
-	new Music(name9, volume9, biquad9, compressor9, 9),
-	new Music(name10, volume10, biquad10, compressor10, 10),
-	new Music(name11, volume11, biquad11, compressor11, 11),
-	new Music(name12, volume12, biquad12, compressor12, 12),
-	new Music(name13, volume13, biquad13, compressor13, 13),
-	new Music(name14, volume14, biquad14, compressor14, 14),
-	new Music(name15, volume15, biquad15, compressor15, 15),
-	new Music(name16, volume16, biquad16, compressor16, 16),
-	new Music(name17, volume17, biquad17, compressor17, 17),
-	new Music(name18, volume18, biquad18, compressor18, 18),
-	new Music(name19, volume19, biquad19, compressor19, 19),
-	new Music(name20, volume20, biquad20, compressor20, 20),
-	new Music(name21, volume21, biquad21, compressor21, 21),
-	new Music(name22, volume22, biquad22, compressor22, 22),
-	new Music(name23, volume23, biquad23, compressor23, 23),
-	new Music(name24, volume24, biquad24, compressor24, 24),
-	new Music(name25, volume25, biquad25, compressor25, 25),
-	new Music(name26, volume26, biquad26, compressor26, 26),
-	new Music(name27, volume27, biquad27, compressor27, 27),
-	new Music(name28, volume28, biquad28, compressor28, 28),
-	new Music(name29, volume29, biquad29, compressor29, 29),
-	new Music(name30, volume30, biquad30, compressor30, 30),
-	new Music(name31, volume31, biquad31, compressor31, 31),
-	new Music(name32, volume32, biquad32, compressor32, 32),
-	new Music(name33, volume33, biquad33, compressor33, 33),
-	new Music(name34, volume34, biquad34, compressor34, 34),
-	new Music(name35, volume35, biquad35, compressor35, 35),
-	new Music(name36, volume36, biquad36, compressor36, 36),
-	new Music(name37, volume37, biquad37, compressor37, 37),
-	new Music(name38, volume38, biquad38, compressor38, 38),
-	new Music(name39, volume39, biquad39, compressor39, 39),
-	new Music(name40, volume40, biquad40, compressor40, 40),
-	
+new Music(name0, volume0, 0),
+new Music(name1, volume1, 1),
+new Music(name2, volume2, 2),
+new Music(name3, volume3, 3),
+new Music(name4, volume4, 4),
+new Music(name5, volume5, 5),
+new Music(name6, volume6, 6),
+new Music(name7, volume7, 7),
+new Music(name8, volume8, 8),
+new Music(name9, volume9, 9),
+new Music(name10, volume10, 10),
+new Music(name11, volume11, 11),
+new Music(name12, volume12, 12),
+new Music(name13, volume13, 13),
+new Music(name14, volume14, 14),
+new Music(name15, volume15, 15),
+new Music(name16, volume16, 16),
+new Music(name17, volume17, 17),
+new Music(name18, volume18, 18),
+new Music(name19, volume19, 19),
+new Music(name20, volume20, 20),
+new Music(name21, volume21, 21),
+new Music(name22, volume22, 22),
+new Music(name23, volume23, 23),
+new Music(name24, volume24, 24),
+new Music(name25, volume25, 25),
+new Music(name26, volume26, 26),
+new Music(name27, volume27, 27),
+new Music(name28, volume28, 28),
+new Music(name29, volume29, 29),
+new Music(name30, volume30, 30),
+new Music(name31, volume31, 31),
+new Music(name32, volume32, 32),
+new Music(name33, volume33, 33),
+new Music(name34, volume34, 34),
+new Music(name35, volume35, 35),
+new Music(name36, volume36, 36),
+new Music(name37, volume37, 37),
+new Music(name38, volume38, 38),
+new Music(name39, volume39, 39),
+new Music(name40, volume40, 40),
+ 
 ];
 
 
@@ -1066,50 +1002,6 @@ function drop(ev) {
 }
 
 
-biquadFilter.addEventListener('change', () => {
-	switch (biquadFilter.value) {
-		case 'lowpass':
-			biquadFrequencyContainer.hidden = false;
-			biquadQualityContainer.hidden = false;
-			biquadGainContainer.hidden = true;
-		break;
-		case 'highpass':
-			biquadFrequencyContainer.hidden = false;
-			biquadQualityContainer.hidden = false;
-			biquadGainContainer.hidden = true;
-		break;
-		case 'bandpass':
-			biquadFrequencyContainer.hidden = false;
-			biquadQualityContainer.hidden = false;
-			biquadGainContainer.hidden = true;
-		break;
-		case 'lowshelf':
-			biquadFrequencyContainer.hidden = false;
-			biquadQualityContainer.hidden = true;
-			biquadGainContainer.hidden = false;
-		break;
-		case 'highshelf':
-			biquadFrequencyContainer.hidden = false;
-			biquadQualityContainer.hidden = true;
-			biquadGainContainer.hidden = false;
-		break;
-		case 'peaking':
-			biquadFrequencyContainer.hidden = false;
-			biquadQualityContainer.hidden = false;
-			biquadGainContainer.hidden = false;
-		break;
-		case 'notch':
-			biquadFrequencyContainer.hidden = false;
-			biquadQualityContainer.hidden = false;
-			biquadGainContainer.hidden = true;
-		break;
-		case 'allpass':
-			biquadFrequencyContainer.hidden = false;
-			biquadQualityContainer.hidden = false;
-			biquadGainContainer.hidden = true;
-		break;
-	}	
-})
 
 
 

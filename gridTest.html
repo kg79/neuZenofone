@@ -1,0 +1,187 @@
+<!doctype html>
+<html>
+    <head>
+        <style>
+            body {
+                margin:0;
+                font-family:sans-serif;
+            } #papPap {
+                background:#ddd;
+                height:100vh;
+                display:grid;
+                grid:1fr / 1fr 4fr; 
+            } .sweetChild {
+                background:#bbb;
+                border:solid lime 1px;
+                text-align:center;
+            } #firstBorn {
+                overflow:scroll;        
+            } #secondBorn {
+                display:grid;    
+                grid-template-columns:1fr / 2fr;
+            } .twins {
+                border:solid 1px black;
+            } input {
+                width:5em;
+            } #concertBox {
+                 background:#aaa;
+                 width:fit-content;
+            } .fracs, .decs {
+                border:solid white 1px;
+                
+            } table {
+                border-collapse:collapse;
+                width:100%;
+            } #customRatioBox {
+                float:left;
+            }
+        </style>
+    </head>
+    <body>
+        <div id='papPap'>
+            <div class='sweetChild' id='firstBorn'>
+                <table id='algorithmTable'></table>
+            </div>
+            <div class='sweetChild' id='secondBorn'>
+                <div class='twins'>
+                    &nbsp;  
+                </div>
+
+                <div class='twins'>
+
+                    <div id='concertBox'>
+                        <label>Concert Pitch: </label><input type='number'  value='216'><br/>
+                        <label>How Many?: </label><input id='howMany' type='number'  value='35'><br/>
+                        <button id='ascending'>ascending</button>
+                    </div>
+
+                    <div id='customRatioBox'>
+                        <label>Custom Ratio: </label><input id='customRatio' value='32/27'><br/>
+                        <button id='customRatioButton'>Insert</button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </body>
+    <script>
+        
+        const ascending = document.getElementById('ascending');
+        const howMany = document.getElementById('howMany');
+        const firstBorn = document.getElementById('firstBorn');
+        const algorithmTable = document.getElementById('algorithmTable');
+        const fracs = document.getElementsByClassName('fracs');
+        const trs = document.getElementsByTagName('tr');
+        const tds = document.getElementsByTagName('td');
+
+        let numerator = 1, denominator = 1, ratios = ['1/1']; 
+        let deleters = [];
+
+        ascending.addEventListener('click', () => {
+
+
+        while (fracs.length) {
+            algorithmTable.removeChild(algorithmTable.firstChild)
+        }
+
+    numerator = 1, denominator = 1, ratios = ['1/1'];
+
+            while (ratios.length < howMany.value) {
+                if (numerator === denominator) {
+                    numerator++;
+                    denominator = 1;
+                }
+
+                    if (numerator/denominator <= 7) {
+                        ratios.push(`${numerator}/${denominator}`);
+                    }
+
+                    denominator++;
+            }
+
+            let pool;
+
+            for (let i = 0; i < ratios.length; i++) {
+                for (let j = 1; j < ratios.length; j++) {
+                    if (eval(ratios[j]) < eval(ratios[j-1])) {
+                        pool = ratios[j];
+                        ratios[j] = ratios[j-1];
+                        ratios[j-1] = pool;
+                    }
+                }
+            }
+
+            for (let i = ratios.length; i > 0; i--) {
+                if (eval(ratios[i]) === eval(ratios[i-1])) {
+                    deleters.push(ratios[i])
+                }
+            }
+
+            for (let i = ratios.length; i > 0; i--) {
+                if (ratios[i] == deleters[0]) {
+                    ratios.splice(i, 1);
+                    deleters.shift();
+                }
+            }
+
+            for (let i = 0; i < ratios.length; i++) {
+
+                let node = document.createElement('tr');
+                algorithmTable.appendChild(node);
+
+                let fractionNode = document.createElement('td');
+                fractionNode.setAttribute('class', 'fracs');
+                let fractionText = document.createTextNode(ratios[i]);
+                fractionNode.appendChild(fractionText);
+                node.appendChild(fractionNode);
+
+                let decimalNode = document.createElement('td');
+                decimalNode.setAttribute('class', 'decs');
+                let decimalText = document.createTextNode(eval(ratios[i]));
+                decimalNode.appendChild(decimalText);   
+                node.appendChild(decimalNode);
+                
+            }
+        });
+
+        const customRatio = document.getElementById('customRatio');
+        const customRatioButton = document.getElementById('customRatioButton');
+        let thingIndex;
+
+        customRatioButton.addEventListener('click', () => {
+
+            for (let i in ratios) {
+       		    if (eval(customRatio.value) < eval(ratios[i])) {
+                    thingIndex = i;
+                    ratios.splice(i, 0, customRatio.value); 	
+                    break;
+		        }
+            }
+
+            let row = document.createElement('tr');
+
+            let fractionCell = document.createElement('td');
+            fractionCell.setAttribute('class', 'fracs');
+            let fractionText = document.createTextNode(customRatio.value)
+            fractionCell.appendChild(fractionText);
+
+            let decimalCell = document.createElement('td');
+            decimalCell.setAttribute('class', 'decs');
+            let decimalText = document.createTextNode(eval(customRatio.value));
+            decimalCell.appendChild(decimalText);
+
+            row.appendChild(fractionCell);
+            row.appendChild(decimalCell);
+
+
+            algorithmTable.insertBefore(row, algorithmTable.childNodes[thingIndex]);
+
+
+
+
+        });
+
+
+    </script>
+</html>
